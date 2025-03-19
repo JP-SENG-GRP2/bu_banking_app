@@ -4,6 +4,9 @@
 ### Week 1 - Agile
 ### Week2 - Running the project
 
+### To run the app "./run.sh" ( run "chmod +x ./run.sh && run.sh" if you get a permision error)
+
+
 Clone the project with git
 Fork the repo in github first to your account .
 After forking clone your repo to which you will have push rights.
