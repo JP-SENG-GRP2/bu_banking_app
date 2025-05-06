@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Make a Transaction</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+  <link rel="stylesheet" type="text/css" href="/static/styles.css">
+ 
+</head>
+<body>
+
+  <!-- Sidebar -->
+  <nav class="sidebar">
+    <div>
+      <div class="d-flex align-items-center mb-4">
+        <i class="bi bi-bank fs-3 me-2"></i>
+        <strong>Highland Ledger</strong>
+      </div>
+      <hr>
+
+      <ul class="nav flex-column mb-auto">
+        <li class="nav-item">
+          <a href="{% url 'dashboard_home' %}" class="nav-link">
+            <i class="bi bi-house-door me-2"></i> Home
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="{% url 'make_transaction' %}" class="nav-link active">
+            <i class="bi bi-credit-card me-2"></i> Make a Payment
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="{% url 'update_user_details' %}" class="nav-link">
+            <i class="bi bi-person-lines-fill me-2"></i> My Details Have Changed
+          </a>
+        </li>
+        <li class="nav-item">
+            <button class="btn nav-link text-danger w-100 text-start" data-bs-toggle="modal" data-bs-target="#deleteAccountModal">
+              <i class="bi bi-trash3 me-2"></i> Delete My Account
+            </button>
+          </li>
+        </ul>
+    </div>
+
+    <a href="{% url 'logout' %}" class="btn btn-danger logout-btn">
+      <i class="bi bi-box-arrow-right me-1"></i> Log out
+    </a>
+  </nav>
+      <!-- Delete Confirmation popup -->
+      <div class="modal fade" id="deleteAccountModal" tabindex="-1" aria-labelledby="deleteAccountModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+          <div class="modal-content border-danger">
+            <div class="modal-header bg-danger text-white">
+              <h5 class="modal-title" id="deleteAccountModalLabel">Confirm Deletion</h5>
+              <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              <p>Are you sure you want to delete your account? This action is permanent and cannot be undone.</p>
+            </div>
+            <div class="modal-footer">
+              <form method="POST" action="{% url 'delete_account' %}">
+                <button type="submit" class="btn btn-danger">Yes, Delete My Account</button>
+              </form>
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+  <!-- Main Content -->
+  <main>
+    <div class="card mb-4">
+        <div class="card-body">
+          <h2 class="card-title">Pay someome:</h2>
+    <form method="POST" action="http://127.0.0.1:8000/api/transactions/">
+      <div class="mb-3">
+        <label for="transactionType" class="form-label">Transaction Type</label>
+        <select name="transaction_type" id="transactionType" class="form-select" required>
+          <option value="payment">Payment</option>
+          <option value="transfer">Transfer</option>
+          <option value="refund">Refund</option>
+          <option value="deposit">Deposit</option>
+          <option value="withdrawal">Withdrawal</option>
+          <option value="other">Other</option>
+        </select>
+      </div>
+
+      <div class="mb-3">
+        <label for="amount" class="form-label">Amount</label>
+        <input type="number" step="0.01" name="amount" id="amount" class="form-control" required>
+      </div>
+
+      <div class="mb-3">
+        <label for="toAccount" class="form-label">To Account (UUID)</label>
+        <input type="text" name="to_account" id="toAccount" class="form-control">
+      </div>
+
+      <div class="mb-3">
+        <label for="business" class="form-label">Business (optional)/Might be descroption???</label>
+        <input type="text" name="business" id="business" class="form-control">
+      </div>
+
+      <button type="submit" class="btn btn-primary">Submit Transaction</button>
+    </form>
+        </div>
+    </div>
+  </main>
+
+  <!-- Bootstrap JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
