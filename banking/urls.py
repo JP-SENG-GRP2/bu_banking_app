@@ -4,12 +4,8 @@ URLs for the banking app with additional diagnostic endpoints.
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
-from rest_framework.views import APIView
 from rest_framework.response import Response
-from .views import AccountViewSet, TransactionViewSet, BusinessViewSet
-from .auth_views import LoginView, UserAccountsView, UserRegistrationView
-from .template_views import register_api
-from .test_view import TestView
+from .views import AccountViewSet, TransactionViewSet, BusinessViewSet, LoginView, UserAccountsView, UserRegistrationView, TestView
 
 # DRF router for RESTful resources
 router = DefaultRouter()
@@ -24,7 +20,7 @@ urlpatterns = [
     path('auth/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('auth/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     path('auth/login/', LoginView.as_view(), name='auth-login'),
-    path('auth/register/', register_api, name='auth-register'),
+    path('auth/register/', UserRegistrationView.as_view(), name='auth-register'),
     path('auth/user/', UserAccountsView.as_view(), name='user-accounts'),
     path('auth/logout/', lambda request: Response({'detail': 'Successfully logged out.'}), name='auth-logout'),
 
