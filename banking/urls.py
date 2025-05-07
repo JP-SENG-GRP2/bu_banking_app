@@ -5,7 +5,7 @@ from django.urls import path, include
 from rest_framework.routers import DefaultRouter
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 from rest_framework.response import Response
-from .views import AccountViewSet, TransactionViewSet, BusinessViewSet, LoginView, UserAccountsView, UserRegistrationView, TestView
+from .views import AccountViewSet, TransactionViewSet, BusinessViewSet, LoginView, UserProfileView, UserPreferencesView, UserRegistrationView, TestView
 
 # DRF router for RESTful resources
 router = DefaultRouter()
@@ -21,11 +21,13 @@ urlpatterns = [
     path('auth/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     path('auth/login/', LoginView.as_view(), name='auth-login'),
     path('auth/register/', UserRegistrationView.as_view(), name='auth-register'),
-    path('auth/user/', UserAccountsView.as_view(), name='user-accounts'),
     path('auth/logout/', lambda request: Response({'detail': 'Successfully logged out.'}), name='auth-logout'),
 
-    # --- Registration and Test Endpoints ---
-    path('simple-register/', UserRegistrationView.as_view(), name='user-registration'),
+    # --- User Profile & Preferences ---
+    path('user/', UserProfileView.as_view(), name='user-profile'),
+    path('user/preferences/', UserPreferencesView.as_view(), name='user-preferences'),
+
+    # --- Test Endpoints ---
     path('test-view/', TestView.as_view(), name='banking-test-view'),
 ]
 

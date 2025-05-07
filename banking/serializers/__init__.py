@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Account, Transaction, Business
+from ..models import Account, Transaction, Business
 from django.contrib.auth.models import User
 
 class UserSerializer(serializers.ModelSerializer):
@@ -28,4 +28,4 @@ class TransactionSerializer(serializers.ModelSerializer):
 class BusinessSerializer(serializers.ModelSerializer):
     class Meta:
         model = Business
-        fields = ['id', 'name', 'category', 'sanctioned']
+        fields = ['id', 'name', 'category', 'sanctioned'] 
